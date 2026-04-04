@@ -1,5 +1,5 @@
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using TiquetesApp.Models;
 
 namespace TiquetesApp.Controllers
@@ -8,18 +8,31 @@ namespace TiquetesApp.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            if (!User.Identity!.IsAuthenticated)
+                return RedirectToAction("Login", "Auth");
+
+            return RedirectToAction("Index", "Eventos");
         }
 
-        public IActionResult Privacy()
+        [Route("Home/Error/{statusCode?}")]
+        public IActionResult Error(int? statusCode = null)
         {
-            return View();
-        }
+            var model = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                StatusCode = statusCode,
+                Message = statusCode switch
+                {
+                    400 => "La solicitud no es válida.",
+                    401 => "No tienes autorización.",
+                    403 => "No tienes permiso para acceder a este recurso.",
+                    404 => "La página que buscas no fue encontrada.",
+                    500 => "Ocurrió un error interno en el servidor.",
+                    _ => "Ocurrió un error inesperado."
+                }
+            };
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(model);
         }
     }
 }
