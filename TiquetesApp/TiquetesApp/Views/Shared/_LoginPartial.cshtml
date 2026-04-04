@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<TiquetesApp.Models.Usuario> SignInManager
+@inject UserManager<TiquetesApp.Models.Usuario> UserManager
+
+<ul class="navbar-nav ms-auto">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <span class="nav-link text-white">
+                @UserManager.GetUserName(User)
+            </span>
+        </li>
+        <li class="nav-item">
+            <button id="btn-logout" class="nav-link btn btn-link text-white">
+                Cerrar Sesión
+            </button>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/auth/login">Iniciar Sesión</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/auth/register">Registrarse</a>
+        </li>
+    }
+</ul>
+
+<script>
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', async function () {
+            await apiClient.post('/auth/logout', {});
+            apiClient.removeToken();
+            window.location.href = '/auth/login';
+        });
+    }
+</script>

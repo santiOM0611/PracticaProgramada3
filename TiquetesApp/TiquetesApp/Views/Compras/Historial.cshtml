@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Mis Compras";
+}
+
+<h2 class="mb-3">Historial de Compras</h2>
+
+<div id="historial-loading" class="text-center my-4">
+    <div class="spinner-border spinner-border-sm"></div>
+    Cargando historial
+</div>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Evento</th>
+            <th>Fecha Evento</th>
+            <th>Lugar</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+            <th>Fecha Compra</th>
+        </tr>
+    </thead>
+    <tbody id="historial-tbody"></tbody>
+    <tfoot>
+        <tr class="table-dark">
+            <td colspan="4" class="text-end fw-bold">Total gastado:</td>
+            <td colspan="2" class="fw-bold text-success" id="total-general">₡0.00</td>
+        </tr>
+    </tfoot>
+</table>
+
+@section Scripts {
+    <script src="~/js/historial.js"></script>
+}
